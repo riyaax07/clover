@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clover - Find Internships That Match YOU</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#00FFC6',
+secondary: '#7289da'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+},
+fontFamily: {
+'poppins': ['Poppins', 'sans-serif'],
+'inter': ['Inter', 'sans-serif']
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before {
+content: "\f3c2";
+}
+.skill-tag {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+.skill-tag:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+.skill-tag button {
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.3s ease;
+}
+.skill-tag button:hover {
+    color: rgba(255, 255, 255, 0.9);
+}
+.suggestion-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.suggestion-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+.match-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+.match-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(4px);
+}
+body {
+background: #0d0d0d;
+font-family: 'Poppins', sans-serif;
+}
+.glass-effect {
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.gradient-text {
+background: linear-gradient(135deg, #00FFC6, #7289da, #ff66c4);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+.neon-border {
+border: 1px solid rgba(0, 255, 198, 0.3);
+box-shadow: 0 0 20px rgba(0, 255, 198, 0.1);
+}
+.hero-bg {
+background: radial-gradient(ellipse at center, rgba(0, 255, 198, 0.1) 0%, rgba(114, 137, 218, 0.05) 50%, transparent 70%);
+}
+.card-hover {
+transition: all 0.3s ease;
+}
+.card-hover:hover {
+transform: translateY(-5px);
+box-shadow: 0 20px 40px rgba(0, 255, 198, 0.2);
+}
+.btn-primary {
+background: linear-gradient(135deg, #00FFC6, #7289da);
+transition: all 0.3s ease;
+}
+.btn-primary:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 30px rgba(0, 255, 198, 0.3);
+}
+.btn-secondary {
+background: rgba(255, 255, 255, 0.1);
+border: 1px solid rgba(255, 255, 255, 0.2);
+transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+background: rgba(255, 255, 255, 0.2);
+transform: translateY(-2px);
+}
+.search-bar {
+background: rgba(255, 255, 255, 0.05);
+border: 1px solid rgba(255, 255, 255, 0.1);
+backdrop-filter: blur(10px);
+}
+.search-bar:focus-within {
+border-color: #00FFC6;
+box-shadow: 0 0 20px rgba(0, 255, 198, 0.2);
+}
+.internship-card {
+background: rgba(255, 255, 255, 0.03);
+border: 1px solid rgba(255, 255, 255, 0.1);
+backdrop-filter: blur(10px);
+transition: all 0.3s ease;
+}
+.internship-card:hover {
+border-color: rgba(255, 102, 196, 0.5);
+box-shadow: 0 15px 35px rgba(255, 102, 196, 0.1);
+transform: translateY(-3px);
+}
+.nav-link {
+position: relative;
+transition: all 0.3s ease;
+}
+.nav-link:hover {
+color: #00FFC6;
+}
+.nav-link::after {
+content: '';
+position: absolute;
+bottom: -5px;
+left: 0;
+width: 0;
+height: 2px;
+background: linear-gradient(135deg, #00FFC6, #7289da);
+transition: width 0.3s ease;
+}
+.nav-link:hover::after {
+width: 100%;
+}
+</style>
+</head>
+<body class="bg-[#0d0d0d] text-white min-h-screen font-poppins">
+<!-- Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-50 glass-effect">
+<div class="max-w-7xl mx-auto px-6 py-4">
+<div class="flex items-center justify-between">
+<div class="text-2xl font-bold gradient-text font-inter">Clover</div>
+<div class="hidden md:flex items-center space-x-8">
+<a href="#" class="nav-link text-gray-300 hover:text-primary font-medium">Home</a>
+<a href="#" class="nav-link text-gray-300 hover:text-primary font-medium">Explore</a>
+<a href="#" class="nav-link text-gray-300 hover:text-primary font-medium">Resume</a>
+<a href="#" class="nav-link text-gray-300 hover:text-primary font-medium">ATS Check</a>
+<a href="#" class="nav-link text-gray-300 hover:text-primary font-medium">Projects</a>
+<button class="btn-secondary px-6 py-2 !rounded-button text-white font-medium whitespace-nowrap">Login</button>
+</div>
+<div class="md:hidden">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-menu-line text-xl"></i>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative pt-32 pb-20 hero-bg min-h-screen flex items-center">
+<div class="max-w-7xl mx-auto px-6 text-center">
+<h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+Find Internships That
+<span class="gradient-text">Match YOU</span>
+</h1>
+<p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto font-light">
+Your personalized guide to top internships. Connect with opportunities that align with your skills, interests, and career goals.
+</p>
+<!-- Search Bar -->
+<div class="search-bar max-w-2xl mx-auto mb-12 p-2 rounded-2xl">
+<div class="flex items-center">
+<div class="w-12 h-12 flex items-center justify-center">
+<i class="ri-search-line text-gray-400 text-xl"></i>
+</div>
+<input type="text" placeholder="Search internships, companies, or roles..."
+class="flex-1 bg-transparent text-white placeholder-gray-400 border-none outline-none px-4 py-3 text-lg">
+<button class="btn-primary px-8 py-3 !rounded-button text-black font-semibold whitespace-nowrap">
+Search
+</button>
+</div>
+</div>
+<!-- CTA Buttons -->
+<div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+<button class="btn-primary px-10 py-4 !rounded-button text-black font-semibold text-lg whitespace-nowrap">
+Get Started
+</button>
+<button class="btn-secondary px-10 py-4 !rounded-button text-white font-semibold text-lg whitespace-nowrap">
+Learn More
+</button>
+</div>
+</div>
+</section>
+<!-- Steps Section -->
+<section class="py-20 bg-gradient-to-b from-transparent to-black/20">
+<div class="max-w-7xl mx-auto px-6">
+<h2 class="text-4xl md:text-5xl font-bold text-center mb-16 gradient-text">How It Works</h2>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="glass-effect p-8 rounded-2xl card-hover text-center">
+<div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
+<i class="ri-search-2-line text-2xl text-black"></i>
+</div>
+<h3 class="text-2xl font-semibold mb-4 text-white">Search</h3>
+<p class="text-gray-300 leading-relaxed">
+Browse through thousands of internship opportunities from top companies. Filter by location, industry, and requirements to find your perfect match.
+</p>
+</div>
+<div class="glass-effect p-8 rounded-2xl card-hover text-center">
+<div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-secondary to-[#ff66c4] rounded-full flex items-center justify-center">
+<i class="ri-heart-3-line text-2xl text-black"></i>
+</div>
+<h3 class="text-2xl font-semibold mb-4 text-white">Match</h3>
+<p class="text-gray-300 leading-relaxed">
+Our AI-powered matching system analyzes your profile, skills, and preferences to recommend the most suitable internships for your career path.
+</p>
+</div>
+<div class="glass-effect p-8 rounded-2xl card-hover text-center">
+<div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#ff66c4] to-primary rounded-full flex items-center justify-center">
+<i class="ri-send-plane-2-line text-2xl text-black"></i>
+</div>
+<h3 class="text-2xl font-semibold mb-4 text-white">Apply</h3>
+<p class="text-gray-300 leading-relaxed">
+Apply directly through our platform with one-click applications. Track your progress and get real-time updates on your application status.
+</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Skills Assessment Section -->
+<section class="py-20 relative">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 gradient-text">Skill Match</h2>
+        <p class="text-xl text-gray-300 text-center mb-16">Enter your skills to discover personalized opportunities</p>
+        <div class="grid md:grid-cols-2 gap-12">
+            <!-- Skills Input Area -->
+            <div class="glass-effect p-8 rounded-2xl">
+                <h3 class="text-2xl font-semibold mb-6 text-white">Your Skills</h3>
+                <div class="flex flex-wrap gap-2 mb-6" id="skillTags"></div>
+                <div class="relative">
+                    <input type="text" id="skillInput" placeholder="Type a skill and press Enter..."
+                        class="w-full bg-black/30 text-white placeholder-gray-400 border border-gray-700 rounded-xl px-4 py-3 focus:border-primary focus:outline-none transition-colors">
+                    <div id="suggestions" class="hidden absolute top-full left-0 right-0 mt-2 bg-black/90 border border-gray-700 rounded-xl overflow-hidden z-10">
+                    </div>
+                </div>
+                <div class="mt-4 text-sm text-gray-400">
+                    Popular: JavaScript, Python, Figma, SQL, React
+                </div>
+            </div>
+            <!-- Results Area -->
+            <div class="space-y-6">
+                <!-- Matching Internships -->
+                <div class="glass-effect p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <i class="ri-briefcase-line text-black text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white">Matching Internships</h3>
+                    </div>
+                    <div id="matchingInternships" class="space-y-3">
+                        <p class="text-gray-400 text-center py-4">Enter your skills to see matching internships</p>
+                    </div>
+                </div>
+                <!-- Recommended Skills -->
+                <div class="glass-effect p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-br from-[#ff66c4] to-primary rounded-lg flex items-center justify-center">
+                            <i class="ri-lightbulb-line text-black text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white">Skills to Learn</h3>
+                    </div>
+                    <div id="recommendedSkills" class="space-y-3">
+                        <p class="text-gray-400 text-center py-4">Enter your skills to see recommendations</p>
+                    </div>
+                </div>
+                <!-- Project Suggestions -->
+                <div class="glass-effect p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-br from-secondary to-[#ff66c4] rounded-lg flex items-center justify-center">
+                            <i class="ri-code-box-line text-black text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white">Project Ideas</h3>
+                    </div>
+                    <div id="projectSuggestions" class="space-y-3">
+                        <p class="text-gray-400 text-center py-4">Enter your skills to see project suggestions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Internship Preview Section -->
+<section class="py-20">
+<div class="max-w-7xl mx-auto px-6">
+<h2 class="text-4xl md:text-5xl font-bold text-center mb-4 gradient-text">Featured Internships</h2>
+<p class="text-xl text-gray-300 text-center mb-16">Discover exciting opportunities from leading companies</p>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="internship-card p-6 rounded-2xl">
+<div class="flex items-center justify-between mb-4">
+<div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+<i class="ri-code-s-slash-line text-white text-xl"></i>
+</div>
+<span class="text-sm text-gray-400">Remote</span>
+</div>
+<h3 class="text-xl font-semibold mb-2 text-white">Software Engineering Intern</h3>
+<p class="text-primary font-medium mb-3">TechFlow Solutions</p>
+<p class="text-gray-300 text-sm mb-4 leading-relaxed">
+Join our dynamic team to work on cutting-edge web applications using React, Node.js, and cloud technologies.
+</p>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-400">
+<i class="ri-time-line mr-1"></i>
+Deadline: Jan 15, 2025
+</span>
+<span class="text-sm text-green-400 font-medium">$2,500/month</span>
+</div>
+</div>
+<div class="internship-card p-6 rounded-2xl">
+<div class="flex items-center justify-between mb-4">
+<div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+<i class="ri-palette-line text-white text-xl"></i>
+</div>
+<span class="text-sm text-gray-400">New York</span>
+</div>
+<h3 class="text-xl font-semibold mb-2 text-white">UX Design Intern</h3>
+<p class="text-primary font-medium mb-3">Creative Studios Inc</p>
+<p class="text-gray-300 text-sm mb-4 leading-relaxed">
+Design user-centered digital experiences for mobile and web platforms. Work with Figma, Sketch, and prototyping tools.
+</p>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-400">
+<i class="ri-time-line mr-1"></i>
+Deadline: Jan 20, 2025
+</span>
+<span class="text-sm text-green-400 font-medium">$2,200/month</span>
+</div>
+</div>
+<div class="internship-card p-6 rounded-2xl">
+<div class="flex items-center justify-between mb-4">
+<div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-lg flex items-center justify-center">
+<i class="ri-bar-chart-box-line text-white text-xl"></i>
+</div>
+<span class="text-sm text-gray-400">San Francisco</span>
+</div>
+<h3 class="text-xl font-semibold mb-2 text-white">Data Analytics Intern</h3>
+<p class="text-primary font-medium mb-3">DataVision Corp</p>
+<p class="text-gray-300 text-sm mb-4 leading-relaxed">
+Analyze large datasets to drive business insights. Experience with Python, SQL, and data visualization tools preferred.
+</p>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-400">
+<i class="ri-time-line mr-1"></i>
+Deadline: Jan 25, 2025
+</span>
+<span class="text-sm text-green-400 font-medium">$2,800/month</span>
+</div>
+</div>
+</div>
+<div class="text-center mt-12">
+<button class="btn-primary px-10 py-4 !rounded-button text-black font-semibold text-lg whitespace-nowrap">
+View All Internships
+</button>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-black/40 backdrop-blur-sm border-t border-gray-800 py-16">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid md:grid-cols-4 gap-8 mb-12">
+<div class="md:col-span-1">
+<div class="text-3xl font-bold gradient-text mb-4 font-inter">Clover</div>
+<p class="text-gray-400 leading-relaxed">
+Connecting ambitious students with life-changing internship opportunities at the world's most innovative companies.
+</p>
+</div>
+<div>
+<h4 class="text-lg font-semibold mb-4 text-white">Quick Links</h4>
+<div class="space-y-3">
+<a href="#" class="block text-gray-400 hover:text-primary transition-colors">Browse Internships</a>
+<a href="#" class="block text-gray-400 hover:text-primary transition-colors">Resume Builder</a>
+<a href="#" class="block text-gray-400 hover:text-primary transition-colors">ATS Checker</a>
+<a href="#" class="block text-gray-400 hover:text-primary transition-colors">Career Resources</a>
+</div>
+</div>
+<div>
+<h4 class="text-lg font-semibold mb-4 text-white">For Students</h4>
+<div class="space-y-3">
+<a href="#" class="block text-gray-400 hover:text-primary transition-colors">How It Works</a>
+<a href="#" class="block text-gray-400 hover:text-primary transition-colors">Success Stories</a>
+<a href="#" class="block text-gray-400 hover:text-primary transition-colors">Interview Tips</a>
+<a href="#" class="block text-gray-400 hover:text-primary transition-colors">Student Support</a>
+</div>
+</div>
+<div>
+<h4 class="text-lg font-semibold mb-4 text-white">Contact</h4>
+<div class="space-y-3">
+<div class="flex items-center text-gray-400">
+<div class="w-5 h-5 flex items-center justify-center mr-3">
+<i class="ri-mail-line"></i>
+</div>
+hello@clover.com
+</div>
+<div class="flex items-center text-gray-400">
+<div class="w-5 h-5 flex items-center justify-center mr-3">
+<i class="ri-phone-line"></i>
+</div>
+(555) 100-100
+</div>
+<div class="flex items-center text-gray-400">
+<div class="w-5 h-5 flex items-center justify-center mr-3">
+<i class="ri-map-pin-line"></i>
+</div>
+bhaad mei jao
+</div>
+</div>
+</div>
+</div>
+<div class="border-t border-gray-800 pt-8">
+<div class="flex flex-col md:flex-row items-center justify-between">
+<p class="text-gray-400 text-sm mb-4 md:mb-0">
+© 2025 Clover. All rights reserved.
+</p>
+<div class="flex items-center space-x-6">
+<a href="#" class="text-gray-400 hover:text-primary transition-colors">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-twitter-line"></i>
+</div>
+</a>
+<a href="#" class="text-gray-400 hover:text-primary transition-colors">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-linkedin-line"></i>
+</div>
+</a>
+<a href="#" class="text-gray-400 hover:text-primary transition-colors">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-instagram-line"></i>
+</div>
+</a>
+<a href="#" class="text-gray-400 hover:text-primary transition-colors">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-discord-line"></i>
+</div>
+</a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const skillInput = document.getElementById('skillInput');
+    const skillTags = document.getElementById('skillTags');
+    const suggestions = document.getElementById('suggestions');
+    const matchingInternships = document.getElementById('matchingInternships');
+    const recommendedSkills = document.getElementById('recommendedSkills');
+    const projectSuggestions = document.getElementById('projectSuggestions');
+    const skills = new Set();
+    
+    const popularSkills = [
+        'JavaScript', 'Python', 'Java', 'HTML', 'CSS', 'React', 'Node.js', 'SQL',
+        'Figma', 'Adobe XD', 'Photoshop', 'UI/UX', 'Git', 'AWS', 'Docker',
+        'TypeScript', 'Angular', 'Vue.js', 'PHP', 'Ruby', 'Swift', 'Kotlin',
+        'Data Analysis', 'Machine Learning', 'Digital Marketing', 'SEO'
+    ];
+    function addSkill(skill) {
+        if (skill && !skills.has(skill)) {
+            skills.add(skill);
+            const tag = document.createElement('div');
+            tag.className = 'skill-tag';
+            tag.innerHTML = `
+                ${skill}
+                <button onclick="this.parentElement.remove(); updateRecommendations();">
+                    <i class="ri-close-line"></i>
+                </button>
+            `;
+            skillTags.appendChild(tag);
+            updateRecommendations();
+        }
+        skillInput.value = '';
+        suggestions.innerHTML = '';
+        suggestions.classList.add('hidden');
+    }
+    function updateRecommendations() {
+        if (skills.size === 0) {
+            matchingInternships.innerHTML = '<p class="text-gray-400 text-center py-4">Enter your skills to see matching internships</p>';
+            recommendedSkills.innerHTML = '<p class="text-gray-400 text-center py-4">Enter your skills to see recommendations</p>';
+            projectSuggestions.innerHTML = '<p class="text-gray-400 text-center py-4">Enter your skills to see project suggestions</p>';
+            return;
+        }
+        // Matching Internships
+        matchingInternships.innerHTML = `
+            <div class="match-item">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-semibold text-white">Frontend Developer Intern</h4>
+                    <span class="text-green-400 text-sm">90% Match</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-2">TechCorp Inc.</p>
+                <div class="flex gap-2">
+                    <span class="text-xs bg-black/30 text-primary px-2 py-1 rounded-full">React</span>
+                    <span class="text-xs bg-black/30 text-primary px-2 py-1 rounded-full">JavaScript</span>
+                </div>
+            </div>
+        `;
+        // Recommended Skills
+        recommendedSkills.innerHTML = `
+            <div class="space-y-2">
+                <div class="flex items-center gap-2">
+                    <i class="ri-arrow-right-line text-primary"></i>
+                    <span class="text-white">TypeScript</span>
+                    <span class="text-xs text-gray-400">(High demand in Frontend roles)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="ri-arrow-right-line text-primary"></i>
+                    <span class="text-white">Next.js</span>
+                    <span class="text-xs text-gray-400">(Popular in startups)</span>
+                </div>
+            </div>
+        `;
+        // Project Suggestions
+        projectSuggestions.innerHTML = `
+            <div class="space-y-4">
+                <div class="match-item">
+                    <h4 class="font-semibold text-white mb-2">Build a Personal Portfolio</h4>
+                    <p class="text-gray-400 text-sm">Create a responsive portfolio website showcasing your projects and skills</p>
+                </div>
+                <div class="match-item">
+                    <h4 class="font-semibold text-white mb-2">E-commerce Dashboard</h4>
+                    <p class="text-gray-400 text-sm">Develop an admin dashboard with data visualization and user management</p>
+                </div>
+            </div>
+        `;
+    }
+    skillInput.addEventListener('input', function() {
+        const value = this.value.toLowerCase();
+        if (!value) {
+            suggestions.innerHTML = '';
+            suggestions.classList.add('hidden');
+            return;
+        }
+        const matches = popularSkills.filter(skill => 
+            skill.toLowerCase().includes(value)
+        ).slice(0, 5);
+        if (matches.length) {
+            suggestions.innerHTML = matches.map(skill => `
+                <div class="suggestion-item text-gray-300 hover:text-white" onclick="addSkill('${skill}')">
+                    ${skill}
+                </div>
+            `).join('');
+            suggestions.classList.remove('hidden');
+        } else {
+            suggestions.classList.add('hidden');
+        }
+    });
+    skillInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addSkill(this.value.trim());
+        }
+    });
+    document.addEventListener('click', function(e) {
+        if (!skillInput.contains(e.target) && !suggestions.contains(e.target)) {
+            suggestions.classList.add('hidden');
+        }
+    });
+    window.addSkill = addSkill;
+});
+</script>
+</body>
+</html><span class="text-sm text-gray-400">San Francisco</span>
